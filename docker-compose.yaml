@@ -1,0 +1,28 @@
+version: "3"
+services:
+  database:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=evos
+    volumes:
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+  backend:
+    build: ./backend
+    ports:
+      - 8080:8080
+    environment:
+      - DB_ADDRESS=database:5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_DATABASE=evos
+    depends_on:
+      - database
+    restart: on-failure:10
+  frontend:
+    build: ./frontend
+    ports:
+      - 3000:3000
