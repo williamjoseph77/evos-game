@@ -55,6 +55,19 @@ func CreateCharacterNonSecure(dbi *pg.DB, request objects.CreateCharacterNonSecu
 		return nil, fmt.Errorf("nilai input %s tidak valid", fieldErr)
 	}
 
+	// EXPLANATION:
+	// This is app level error check, so we can get "human error text" instead of postgres error message
+	// But I create a feature so this name column needs to be unique on DB too, so we can't accidentally create records with same name
+	// You can test if we can insert same name (case insensitive) by commenting line line 62-69
+	isExist, err := db.IsCharacterExistByName(dbi, request.Name)
+	if err != nil {
+		return nil, err
+	}
+
+	if isExist {
+		return nil, fmt.Errorf("nama sudah digunakan, silakan input nama lain")
+	}
+
 	newCharacter, err := db.CreateCharacter(dbi, domains.Character{
 		Name:   request.Name,
 		RoleID: request.RoleID,
@@ -74,6 +87,19 @@ func CreateCharacterSecure(dbi *pg.DB, request objects.CreateCharacterSecureRequ
 	fieldErr := validateCreateCharacterSecurePayload(request)
 	if fieldErr != "" {
 		return nil, fmt.Errorf("nilai input %s tidak valid", fieldErr)
+	}
+
+	// EXPLANATION:
+	// This is app level error check, so we can get "human error text" instead of postgres error message
+	// But I create a feature so this name column needs to be unique on DB too, so we can't accidentally create records with same name
+	// You can test if we can insert same name (case insensitive) by commenting line line 96-103
+	isExist, err := db.IsCharacterExistByName(dbi, request.Name)
+	if err != nil {
+		return nil, err
+	}
+
+	if isExist {
+		return nil, fmt.Errorf("nama sudah digunakan, silakan input nama lain")
 	}
 
 	role, err := db.GetRoleByGUID(dbi, request.RoleGUID)

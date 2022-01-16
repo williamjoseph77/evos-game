@@ -9,4 +9,5 @@ CREATE TABLE IF NOT EXISTS characters
   PRIMARY KEY (id)
 );
 
+CREATE UNIQUE INDEX name_unique_idx ON characters (LOWER(name));
 ALTER TABLE characters ADD CONSTRAINT FK_characters_role_id FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE RESTRICT ON UPDATE CASCADE;

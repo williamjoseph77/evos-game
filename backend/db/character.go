@@ -2,6 +2,7 @@ package db
 
 import (
 	"log"
+	"strings"
 
 	"github.com/williamjoseph77/evos/domains"
 
@@ -47,4 +48,21 @@ func GetCharacters(dbi *pg.DB) ([]domains.Character, error) {
 	}
 
 	return characters, nil
+}
+
+// GetCharacters get all characters
+func IsCharacterExistByName(dbi *pg.DB, name string) (bool, error) {
+	var character domains.Character
+
+	count, err := dbi.Model(&character).Where("LOWER(name) = ?", strings.ToLower(name)).Count()
+	if err != nil {
+		log.Printf("error getting character with name %s", name)
+		return false, err
+	}
+
+	if count > 0 {
+		return true, nil
+	}
+
+	return false, nil
 }
