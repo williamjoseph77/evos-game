@@ -1,0 +1,19 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.emptyContainer {
+  text-align: center;
+}
+
+.characterListTableContainer {
+  border-collapse: collapse;
+}
+
+.characterListTableContainer td {
+  padding: 5px;
+  border: 1px solid black;
+}
