@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { useCallback, useEffect, useState } from "react";
 import { getCharacterListURL } from "../../../services/api/url";
+import { formatCurrency } from "../../../services/utils";
 import styles from "./style.module.css";
 import { iGetCharacterListResponse } from "./types";
 
@@ -72,7 +73,7 @@ const GetCharacterListPage: NextPage = () => {
                   <td>{character.name}</td>
                   <td>{character.role.name}</td>
                   <td>{character.power}</td>
-                  <td>{character.wealth}</td>
+                  <td>{formatCurrency(character.wealth)}</td>
                 </tr>
               );
             })}
